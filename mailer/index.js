@@ -1,19 +1,21 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "outlook",
+  service: process.env.NODEMAILER_SERVICE,
+  host: "smtp.gmail.com",
+  secure: false,
   auth: {
-    user: "thakurthegr8@outlook.com",
-    pass: "Awskol7906#",
+    user: process.env.NODEMAILER_ID,
+    pass: process.env.NODEMAILER_PASS,
   },
 });
 
 const sendMail = async (mailConfig) => {
-  const customMailConfig = { ...mailConfig, from: "thakurthegr8@outlook.com" };
+  const customMailConfig = { ...mailConfig, from: process.env.NODEMAILER_PASS };
   try {
     const mail = await transporter.sendMail(customMailConfig);
     if (mail) {
-        console.log(mail);
+      console.log(mail);
       return true;
     }
   } catch (error) {

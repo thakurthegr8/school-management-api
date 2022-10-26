@@ -17,6 +17,7 @@ app.post("/auth/login/with_token", authControllers.loginWithAccessToken);
 app.post("/auth/access_token", authControllers.getAccessToken);
 
 app.post("/admin/teacher", isAdmin, userControllers.addUser);
+app.delete("/admin/teacher/delete", isAdmin, userControllers.deleteUser);
 
 app.use((req, res) => res.status(404).json("404 not found"));
 
