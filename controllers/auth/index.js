@@ -1,20 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 const User = require("../../database/models/User");
-
-const generateAccessToken = (accessTokenData) => {
-  //accessTokenData =  { id: response._id, roles: response.roles }
-  return jwt.sign({ data: accessTokenData }, process.env.JWT_SECRET, {
-    expiresIn: 60 * 60,
-  });
-};
-
-const generateRefreshToken = (refreshTokenData) => {
-  //accessTokenData =  { id: response._id }
-  return jwt.sign({ data: refreshTokenData }, process.env.JWT_SECRET, {
-    expiresIn: 60 * 60,
-  });
-};
+const {generateAccessToken, generateRefreshToken} = require("../../generators/tokenGenerators");
 
 const signup = async (req, res) => {
   const body = req.body;
@@ -72,10 +60,38 @@ const login = async (req, res) => {
     }
     return res.status(400).json("Invalid email or password");
   } catch (error) {
+    console.log(error);
     return res.status(400).json(error);
   }
 };
 
+const loginWithAccessToken = async (req,res)=>{
+  const oldAccessToken = req.headers.authorization.split(" ")[1];
+  try {
+    const decodedToken = jwt.verify(oldAccessToken, process.env.JWT_SECRET);
+    const offset = moment.unix(decodedToken.exp).diff(moment(), "minutes");
+    if(offset > 60) return res.status(200).json("token expired");
+    const getUser = await User.findById(decodedToken.data._id);
+    if (getUser) {
+      const newAccessToken = generateAccessToken({
+        _id: getUser._id,
+        roles: getUser.roles,
+      });
+      const refreshToken = generateRefreshToken({
+        _id: getUser._id,
+      });
+      return res
+        .status(200)
+        .json({
+          ...getUser._doc,
+          access_token: newAccessToken,
+          refresh_token: refreshToken,
+        });
+    }
+  } catch (error) {
+    return res.status(200).json(error);
+  }
+}
 const getAccessToken = async (req, res) => {
   const body = req.body;
   try {
@@ -102,4 +118,4 @@ const getAccessToken = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, getAccessToken };
+module.exports = { signup, login, getAccessToken,loginWithAccessToken };

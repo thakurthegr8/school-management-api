@@ -19,7 +19,8 @@
     "mocha": "^10.1.0",
     "moment": "^2.29.4",
     "mongodb": "^4.11.0",
-    "mongoose": "^6.7.0"
+    "mongoose": "^6.7.0",
+    "nodemailer": "^6.8.0"
   },
   "devDependencies": {
     "supertest": "^6.3.1"
