@@ -15,6 +15,12 @@ const addClass = async (req, res) => {
       { _id: body.author },
       { $push: { classes: addClassResponse._id } }
     );
+    await body.students.forEach(async (element) => {
+      await User.updateOne(
+        { _id: element },
+        { $push: { classes: addClassResponse._id } }
+      );
+    });
 
     if (
       addClassResponse &&
@@ -23,6 +29,7 @@ const addClass = async (req, res) => {
     )
       return res.status(201).json(addClassResponse);
   } catch (error) {
+    console.log(error);
     return res.status(400).json(error);
   }
 };
