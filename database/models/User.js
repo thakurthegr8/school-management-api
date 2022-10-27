@@ -14,7 +14,7 @@ const UserSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique:true,
+      unique: true,
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Please fill a valid email address",
@@ -32,12 +32,10 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    roles: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    role: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

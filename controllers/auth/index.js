@@ -14,7 +14,7 @@ const signup = async (req, res) => {
       const response = await User.create(updatedBody);
       const accessToken = generateAccessToken({
         _id: response._id,
-        roles: response.roles,
+        role: response.role,
       });
       const refreshToken = generateRefreshToken({
         _id: response._id,
@@ -45,7 +45,7 @@ const login = async (req, res) => {
       if (isPasswordMatched) {
         const accessToken = generateAccessToken({
           _id: getUser._id,
-          roles: getUser.roles,
+          role: getUser.role,
         });
         const refreshToken = generateRefreshToken({
           _id: getUser._id,
@@ -75,7 +75,7 @@ const loginWithAccessToken = async (req,res)=>{
     if (getUser) {
       const newAccessToken = generateAccessToken({
         _id: getUser._id,
-        roles: getUser.roles,
+        role: getUser.role,
       });
       const refreshToken = generateRefreshToken({
         _id: getUser._id,
@@ -100,7 +100,7 @@ const getAccessToken = async (req, res) => {
     if (getUser) {
       const accessToken = generateAccessToken({
         _id: getUser._id,
-        roles: getUser.roles,
+        role: getUser.role,
       });
       const refreshToken = generateRefreshToken({
         _id: getUser._id,

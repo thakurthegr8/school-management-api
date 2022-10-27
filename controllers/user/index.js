@@ -4,6 +4,20 @@ const passwordGenerator = require("../../generators/passwordGenerator");
 const sendMail = require("../../mailer");
 const mailTemplates = require("../../mailer/templates");
 
+const getUser = async (req, res) => {
+  const query = req.query;
+  try {
+    if (query) {
+      const users = await User.find(query);
+      return res.status(200).json(users);
+    }
+    const users = await User.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
 const addUser = async (req, res) => {
   const body = req.body;
   const saltRounds = 10;
@@ -38,7 +52,8 @@ const deleteUser = async (req, res) => {
         subject: "Removed from school",
         html: "<h1>You've have been removed from school management</h1>",
       };
-      if (sendMail(mailConfig)) return res.status(201).json(deleteResponse._doc);
+      if (sendMail(mailConfig))
+        return res.status(201).json(deleteResponse._doc);
     } catch (error) {
       return res.status(400).json(error);
     }
@@ -46,4 +61,4 @@ const deleteUser = async (req, res) => {
     return res.status(400).json(error);
   }
 };
-module.exports = { addUser, deleteUser };
+module.exports = { addUser, deleteUser, getUser };

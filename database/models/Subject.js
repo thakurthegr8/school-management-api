@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const SubjectSchema = new Schema(
   {
     code: {
-      type: Schema.Types.ObjectId,
-      refer: 'User',
+      type: String,
+      required: true
     },
     name: {
       type: String,

@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken");
 
 const isAdmin = async (req, res, next) => {
+  if(!req.headers.authorization)  return res.status(501).json('No access token');
   const accessToken = req.headers.authorization.split(" ")[1];
   try {
     const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
-    const roles = decodedToken.data.roles;
-    if (!roles.includes("admin"))
+    const role = decodedToken.data.role;
+    if (role != 'admin')
       return res.status(401).json("unauthorized access");
     next();
   } catch (error) {
@@ -13,11 +14,12 @@ const isAdmin = async (req, res, next) => {
   }
 };
 const isTeacher = async (req, res, next) => {
+  if(!req.headers.authorization)  return res.status(501).json('No access token');
   const accessToken = req.headers.authorization.split(" ")[1];
   try {
     const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
-    const roles = decodedToken.data.roles;
-    if (!roles.includes("teacher"))
+    const role = decodedToken.data.role;
+    if (role != 'teacher')
       return res.status(401).json("unauthorized access");
     next();
   } catch (error) {
@@ -25,11 +27,12 @@ const isTeacher = async (req, res, next) => {
   }
 };
 const isStudent = async (req, res, next) => {
+  if(!req.headers.authorization)  return res.status(501).json('No access token');
   const accessToken = req.headers.authorization.split(" ")[1];
   try {
     const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
-    const roles = decodedToken.data.roles;
-    if (!roles.includes("student"))
+    const role = decodedToken.data.role;
+    if (role != 'student')
       return res.status(401).json("unauthorized access");
     next();
   } catch (error) {
