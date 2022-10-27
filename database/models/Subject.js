@@ -5,17 +5,18 @@ const SubjectSchema = new Schema(
   {
     code: {
       type: String,
-      required: true
+      required: true,
     },
     name: {
       type: String,
       required: true,
     },
-    author: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    classes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Class",
+      },
+    ],
   },
   { timestamps: true }
 );

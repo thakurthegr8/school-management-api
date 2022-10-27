@@ -36,6 +36,12 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    classes: [
+      {
+        type: Schema.Types.ObjectId,
+        refer: "Class",
+      },
+    ],
   },
   { timestamps: true }
 );

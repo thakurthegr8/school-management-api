@@ -3,13 +3,9 @@ const Schema = mongoose.Schema;
 
 const ClassSchema = new Schema(
   {
-    code: {
-      type: String,
-      required: true,
-      unique:true
-    },
-    name: {
-      type: String,
+    subject: {
+      type: Schema.Types.ObjectId,
+      refer: "Subject",
       required: true,
     },
     author: {
@@ -23,11 +19,12 @@ const ClassSchema = new Schema(
         ref: "User",
       },
     ],
-    section:{
-      type:String,
-      required:true,
-      match:[/^[A-Z]{1}$/,'Section can only be of single character']
-    }
+    section: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/^[A-Z]{1}$/, "Section can only be of single character"],
+    },
   },
   { timestamps: true }
 );
