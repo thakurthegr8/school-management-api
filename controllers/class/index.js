@@ -13,7 +13,7 @@ const addClass = async (req, res) => {
 
 const getClass = async (req, res) => {
     try {
-      const response = await Class.find().populate('students');
+      const response = await Class.find().populate('students').populate('author');
       return res.status(200).json(response);
     } catch (error) {
       return res.status(201).json(error);
