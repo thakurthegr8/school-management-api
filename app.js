@@ -22,14 +22,14 @@ app.get("/users", userControllers.getUser);
 app.post("/user", userControllers.addUser);
 app.delete("/user/delete", userControllers.deleteUser);
 
-app.get("/admin/classes", classControllers.getClass);
-app.get("/teacher/classes", isTeacher, classControllers.getClass);
-app.get("/student/classes", isStudent, classControllers.getClass);
+app.get("/admin/classes", isAdmin, classControllers.getClass);
+app.get("/teacher/classes", isTeacher, classControllers.getClassByTeacher);
+app.get("/student/classes", isStudent, classControllers.getClassByStudent);
 app.post("/class", classControllers.addClass);
 app.delete("/class/delete", classControllers.deleteClass);
 app.patch("/class/update", classControllers.updateClass);
 app.post("/class/student", classControllers.addStudentInClass);
-app.post("/class/teacher", classControllers.addStudentInClass);
+app.post("/class/teacher", classControllers.addTeacherInClass);
 
 app.get("/subjects", subjectControllers.getSubject);
 app.post("/subject", subjectControllers.addSubject);

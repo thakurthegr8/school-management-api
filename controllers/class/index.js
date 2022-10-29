@@ -15,6 +15,7 @@ const addClass = async (req, res) => {
       { _id: body.author },
       { $push: { classes: addClassResponse._id } }
     );
+    //map class to each student
     await body.students.forEach(async (element) => {
       await User.updateOne(
         { _id: element },
@@ -35,13 +36,12 @@ const addClass = async (req, res) => {
 };
 
 const getClass = async (req, res) => {
-  console.log(req.user, req.role);
   const query = req.query;
   try {
     if (query) {
       const response = await Class.find(query)
-        .populate("students")
-        .populate("author");
+        .populate("author")
+        .populate("subject");
       return res.status(200).json(response);
     }
     const response = await Class.find()
@@ -50,6 +50,34 @@ const getClass = async (req, res) => {
       .populate("subject");
     return res.status(200).json(response);
   } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+const getClassByTeacher = async (req, res) => {
+  const author = req.user;
+  try {
+    const response = await Class.find(
+      { author },
+      { author: 0, students: 0 }
+    ).populate(["students", "author", "subject"]);
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+};
+
+const getClassByStudent = async (req, res) => {
+  const _id = req.user;
+  try {
+    const classIds = await User.findById(_id, { classes: 1, _id: 0 });
+    const classes = await Class.find({ _id: classIds.classes }).populate(
+      "subject"
+    );
+    return res.status(200).json(classes);
+  } catch (error) {
+    console.log(error);
     return res.status(400).json(error);
   }
 };
@@ -115,6 +143,8 @@ const addTeacherInClass = async (req, res) => {
 module.exports = {
   addClass,
   getClass,
+  getClassByTeacher,
+  getClassByStudent,
   deleteClass,
   updateClass,
   addStudentInClass,

@@ -39,7 +39,7 @@ const UserSchema = new Schema(
     classes: [
       {
         type: Schema.Types.ObjectId,
-        refer: "Class",
+        ref: "Class",
       },
     ],
   },

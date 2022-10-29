@@ -5,7 +5,7 @@ const ClassSchema = new Schema(
   {
     subject: {
       type: Schema.Types.ObjectId,
-      refer: "Subject",
+      ref: "Subject",
       required: true,
     },
     author: {
