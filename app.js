@@ -1,40 +1,27 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const DB = require("./database");
-const authControllers = require("./controllers/auth");
-const userControllers = require("./controllers/user");
-const classControllers = require("./controllers/class");
-const subjectControllers = require("./controllers/subject");
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const classRoutes = require("./routes/class");
+const subjectRoutes = require("./routes/subject");
 const { isAdmin, isTeacher, isStudent } = require("./middlewares");
 
 const app = express();
 
 DB();
 app.use(bodyParser.json());
+app.use(cors());
 
-app.post("/auth/signup", authControllers.signup);
-app.post("/auth/login", authControllers.login);
-app.post("/auth/login/with_token", authControllers.loginWithAccessToken);
-app.post("/auth/access_token", authControllers.getAccessToken);
+app.use("/auth", authRoutes);
 
-app.get("/users", userControllers.getUser);
-app.post("/user", userControllers.addUser);
-app.delete("/user/delete", userControllers.deleteUser);
+app.use("/user", userRoutes);
 
-app.get("/admin/classes", isAdmin, classControllers.getClass);
-app.get("/teacher/classes", isTeacher, classControllers.getClassByTeacher);
-app.get("/student/classes", isStudent, classControllers.getClassByStudent);
-app.post("/class", classControllers.addClass);
-app.delete("/class/delete", classControllers.deleteClass);
-app.patch("/class/update", classControllers.updateClass);
-app.post("/class/student", classControllers.addStudentInClass);
-app.post("/class/teacher", classControllers.addTeacherInClass);
+app.use("/class", classRoutes);
 
-app.get("/subjects", subjectControllers.getSubject);
-app.post("/subject", subjectControllers.addSubject);
-app.delete("/subject/delete", subjectControllers.deleteSubject);
-app.patch("/subject/update", subjectControllers.updateSubject);
+app.use("/subject", subjectRoutes);
 
 app.use((req, res) => res.status(404).json("404 not found"));
 

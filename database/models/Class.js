@@ -22,12 +22,13 @@ const ClassSchema = new Schema(
     section: {
       type: String,
       required: true,
-      unique: true,
       match: [/^[A-Z]{1}$/, "Section can only be of single character"],
     },
   },
   { timestamps: true }
 );
+
+ClassSchema.index({ subject: 1, section: 1 }, { unique: true });
 
 const Class = mongoose.model("Class", ClassSchema);
 

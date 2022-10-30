@@ -42,6 +42,17 @@ const UserSchema = new Schema(
         ref: "Class",
       },
     ],
+    marks: [
+      {
+        subject: {
+          type: Schema.Types.ObjectId,
+          ref: "Subject",
+        },
+        marks: {
+          type: Number,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

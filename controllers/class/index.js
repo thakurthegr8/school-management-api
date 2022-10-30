@@ -58,7 +58,7 @@ const getClassByTeacher = async (req, res) => {
   try {
     const response = await Class.find(
       { author },
-      { author: 0, students: 0 }
+      { author: 0, students: 1 }
     ).populate(["students", "author", "subject"]);
 
     return res.status(200).json(response);
@@ -122,24 +122,58 @@ const addStudentInClass = async (req, res) => {
     return res.status(400).json(error);
   }
 };
-const addTeacherInClass = async (req, res) => {
+
+const deleteStudentInClass = async (req, res) => {
   if (req.body == null) return res.status(400).json("insert request body");
   const body = req.body;
   try {
-    const addTeacherResponse = await Class.updateOne(
+    const deleteStudentResponse = await Class.updateOne(
       { _id: body.class_id },
-      { $push: { students: body.student_id } }
+      { $pullAll: { students: [body.student_id] } }
     );
-    const addClassResponse = await User.updateOne(
+    const deleteClassResponse = await User.updateOne(
       { _id: body.student_id },
-      { $push: { classes: body.class_id } }
+      { $pullAll: { classes: [body.class_id] } }
     );
-    if (addClassResponse && addStudentResponse)
-      return res.status(201).json(addStudentResponse);
+    if (deleteStudentResponse && deleteClassResponse)
+      return res.status(201).json(deleteStudentResponse);
   } catch (error) {
     return res.status(400).json(error);
   }
 };
+
+const updateTeacherInClass = async (req, res) => {
+  if (req.body == null) return res.status(400).json("insert request body");
+  const body = req.body;
+  try {
+    const updateTeacherResponse = await Class.updateOne({
+      _id: body.class_id,
+      author: body.teacher_id,
+    });
+    const updateClassToExistingTeacherResponse = await User.updateOne(
+      {
+        _id: body.teacher_id,
+      },
+      { $pullAll: { classes: [body.class_id] } }
+    );
+    const updateClassToNewTeacherResponse = await User.updateOne(
+      {
+        _id: body.teacher_id,
+      },
+      { $push: { classes: body.class_id } }
+    );
+    if (
+      updateTeacherResponse &&
+      updateClassToExistingTeacherResponse &&
+      updateClassToNewTeacherResponse
+    ) {
+      return res.status(201).json(updateClassToNewTeacherResponse);
+    }
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
 module.exports = {
   addClass,
   getClass,
@@ -148,5 +182,6 @@ module.exports = {
   deleteClass,
   updateClass,
   addStudentInClass,
-  addTeacherInClass,
+  updateTeacherInClass,
+  deleteStudentInClass,
 };
