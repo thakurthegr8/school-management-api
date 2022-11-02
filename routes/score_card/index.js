@@ -1,6 +1,12 @@
 const router = require("express").Router();
 const scoreCardControllers = require("../../controllers/score");
-const { isTeacher, isStudent } = require("../../middlewares");
+const { isStudent } = require("../../middlewares");
+const {
+  getSubjectByTeacherBodySchema,
+  addScoreCardBodySchema,
+  deleteScoreCardBodySchema,
+  updateScoreCardScoreBodySchema,
+} = require("../../middlewares/allowed_request_body_parameters/score_card");
 
 router.get(
   "/by_student",
@@ -9,14 +15,18 @@ router.get(
 );
 router.post(
   "/by_teacher",
-  isTeacher,
+  getSubjectByTeacherBodySchema,
   scoreCardControllers.getScoreCardByTeacher
 );
-router.post("/add", isTeacher, scoreCardControllers.addScoreCard);
-router.delete("/delete", isTeacher, scoreCardControllers.deleteScoreCard);
+router.post("/add", addScoreCardBodySchema, scoreCardControllers.addScoreCard);
+router.delete(
+  "/delete",
+  deleteScoreCardBodySchema,
+  scoreCardControllers.deleteScoreCard
+);
 router.patch(
   "/update_score",
-  isTeacher,
+  updateScoreCardScoreBodySchema,
   scoreCardControllers.updateScoreCardScore
 );
 

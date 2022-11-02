@@ -1,9 +1,13 @@
 const router = require("express").Router();
 const userControllers = require("../../controllers/user");
-const { isAdmin } = require("../../middlewares");
+const {
+  getUserBodySchema,
+  addUserBodySchema,
+  deleteUserBodySchema,
+} = require("../../middlewares/allowed_request_body_parameters/user");
 
-router.get("/", userControllers.getUser);
-router.post("/", isAdmin, userControllers.addUser);
-router.delete("/delete", isAdmin, userControllers.deleteUser);
+router.get("/", getUserBodySchema, userControllers.getUser);
+router.post("/", addUserBodySchema, userControllers.addUser);
+router.delete("/delete", deleteUserBodySchema, userControllers.deleteUser);
 
 module.exports = router;

@@ -8,10 +8,10 @@ const getUser = async (req, res) => {
   const query = req.query;
   try {
     if (query) {
-      const users = await User.find(query);
+      const users = await User.find(query, { password: 0, classes: 0 });
       return res.status(200).json(users);
     }
-    const users = await User.find();
+    const users = await User.find({}, { password: 0, classes: 0 });
     return res.status(200).json(users);
   } catch (error) {
     return res.status(400).json(error);
