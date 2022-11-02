@@ -1,6 +1,11 @@
 const Class = require("../../database/models/Class");
 const Subject = require("../../database/models/Subject");
 const User = require("../../database/models/User");
+const {
+  getClassByStudentOuterFields,
+  getClassByStudentAuthorFields,
+  getClassByStudentSubjectFields,
+} = require("../../utils/allowed_response_body_fields/class");
 
 const addClass = async (req, res) => {
   if (req.body == null) return res.status(400).json("insert request body");
@@ -72,9 +77,12 @@ const getClassByStudent = async (req, res) => {
   const _id = req.user;
   try {
     const classIds = await User.findById(_id, { classes: 1, _id: 0 });
-    const classes = await Class.find({ _id: classIds.classes }).populate(
-      "subject"
-    );
+    const classes = await Class.find(
+      { _id: classIds.classes },
+      getClassByStudentOuterFields
+    )
+      .populate("subject", getClassByStudentSubjectFields)
+      .populate("author", getClassByStudentAuthorFields);
     return res.status(200).json(classes);
   } catch (error) {
     console.log(error);

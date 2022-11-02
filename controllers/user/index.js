@@ -3,15 +3,18 @@ const User = require("../../database/models/User");
 const passwordGenerator = require("../../generators/passwordGenerator");
 const sendMail = require("../../mailer");
 const mailTemplates = require("../../mailer/templates");
+const {
+  getUserFields,
+} = require("../../utils/allowed_response_body_fields/user");
 
 const getUser = async (req, res) => {
   const query = req.query;
   try {
     if (query) {
-      const users = await User.find(query, { password: 0, classes: 0 });
+      const users = await User.find(query, getUserFields);
       return res.status(200).json(users);
     }
-    const users = await User.find({}, { password: 0, classes: 0 });
+    const users = await User.find({}, getUserFields);
     return res.status(200).json(users);
   } catch (error) {
     return res.status(400).json(error);
@@ -55,10 +58,10 @@ const deleteUser = async (req, res) => {
       if (sendMail(mailConfig))
         return res.status(201).json(deleteResponse._doc);
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(500).json(error);
     }
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(500).json(error);
   }
 };
 module.exports = { addUser, deleteUser, getUser };

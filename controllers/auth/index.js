@@ -2,7 +2,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const User = require("../../database/models/User");
-const {generateAccessToken, generateRefreshToken} = require("../../generators/tokenGenerators");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../../generators/tokenGenerators");
+const {
+  loginFields,
+} = require("../../utils/allowed_response_body_fields/auth");
 
 const signup = async (req, res) => {
   const body = req.body;
@@ -37,6 +43,7 @@ const login = async (req, res) => {
   const body = req.body;
   try {
     const getUser = await User.findOne({ email: body.email });
+    
     if (getUser) {
       const isPasswordMatched = await bcrypt.compare(
         body.password,
@@ -65,12 +72,12 @@ const login = async (req, res) => {
   }
 };
 
-const loginWithAccessToken = async (req,res)=>{
+const loginWithAccessToken = async (req, res) => {
   const oldAccessToken = req.headers.authorization.split(" ")[1];
   try {
     const decodedToken = jwt.verify(oldAccessToken, process.env.JWT_SECRET);
     const offset = moment.unix(decodedToken.exp).diff(moment(), "minutes");
-    if(offset > 60) return res.status(200).json("token expired");
+    if (offset > 60) return res.status(200).json("token expired");
     const getUser = await User.findById(decodedToken.data._id);
     if (getUser) {
       const newAccessToken = generateAccessToken({
@@ -80,18 +87,16 @@ const loginWithAccessToken = async (req,res)=>{
       const refreshToken = generateRefreshToken({
         _id: getUser._id,
       });
-      return res
-        .status(200)
-        .json({
-          ...getUser._doc,
-          access_token: newAccessToken,
-          refresh_token: refreshToken,
-        });
+      return res.status(200).json({
+        ...getUser._doc,
+        access_token: newAccessToken,
+        refresh_token: refreshToken,
+      });
     }
   } catch (error) {
     return res.status(200).json(error);
   }
-}
+};
 
 const getAccessToken = async (req, res) => {
   const body = req.body;
@@ -106,17 +111,15 @@ const getAccessToken = async (req, res) => {
       const refreshToken = generateRefreshToken({
         _id: getUser._id,
       });
-      return res
-        .status(200)
-        .json({
-          ...getUser._doc,
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        });
+      return res.status(200).json({
+        ...getUser._doc,
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
     }
   } catch (error) {
     return res.status(200).json("Invalid refresh token");
   }
 };
 
-module.exports = { signup, login, getAccessToken,loginWithAccessToken };
+module.exports = { signup, login, getAccessToken, loginWithAccessToken };
