@@ -8,7 +8,7 @@ const {
 
 router.post("/signup", signUpBodySchema, authControllers.signup);
 router.post("/login", loginBodySchema, authControllers.login);
-router.post("/login/with_token", authControllers.loginWithAccessToken);
+router.get("/login/with_token", authControllers.loginWithAccessToken);
 router.post(
   "/access_token",
   getAccessTokenBodySchema,
