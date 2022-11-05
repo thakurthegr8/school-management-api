@@ -1,13 +1,28 @@
 <% 
 const keys = [{type:"text", value:"first_name", placeholder:"First name"},
 {type:"text", value:"last_name",placeholder:"Last name"},
-{type:"email", value:"email", placeholder:"Your Email"},
-{type:"select", value:"gender", placeholder:"Your Email", options:["male", "female","others"]}] %>
+{type:"email", value:"email", placeholder:"Email"},
+{type:"select", value:"gender", placeholder:"Gender", options:["male", "female","others"]},
+{type:"number", value:"age", placeholder:"Age", max:100, min:1},
+{type:"select", value:"role", placeholder:"Role", options:["admin", "student","teacher"]}
+] %>
 
 <h1>Add User</h1>
 <form id="addUserForm">
   <% keys.forEach((item)=>{ %>
   <label for="<%= item.value%>"><%= item.placeholder%></label>
+  <% if(item.type === 'select'){ %>
+  <select id="<%= item.value%>" name="<%= item.value%>" placeholder="<%= item.placeholder%>">
+    <% item.options.forEach((optionItem)=>{ %>
+    <option value="<%= optionItem%>"><%=optionItem%></option>
+    <%})%>
+  </select>
+
+  <% }else if (item.type === "number"){%>
+  <input type="<%= item.type%>" id="<%= item.value%>" name="<%= item.value%>" max="<%= item.max%>" min="<%= item.min%>" placeholder="<%= item.placeholder%>" />
+  <% }else {%>
   <input type="<%= item.type%>" id="<%= item.value%>" name="<%= item.value%>" placeholder="<%= item.placeholder%>" />
+  <% }%>
   <% }) %>
+  <button type="submit">Submit</button>
 </form>

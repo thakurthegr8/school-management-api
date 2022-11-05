@@ -16,8 +16,28 @@
   </form>
   <%- user.role === "admin" ? include("../partials/add_user") : null %>
   <script>
+    const addUserForm = document.querySelector("#addUserForm");
+    const addUserFormHandler = async (e) => {
+      e.preventDefault();
+      console.log(addUserForm);
+      try {
+        const formResponse = await axios.post("/api/user", {
+          first_name: addUserForm.first_name.value,
+          last_name: addUserForm.last_name.value,
+          email: addUserForm.last_name.value,
+          gender: addUserForm.gender.value,
+          age: addUserForm.age.value,
+          role: addUserForm.role.value,
+        });
+        const addedUserData = await formResponse.data;
+        console.log(addedUserData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    addUserForm.addEventListener("submit", addUserFormHandler);
   </script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
 </body>
 
 </html>
