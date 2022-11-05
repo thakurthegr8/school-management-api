@@ -15,5 +15,6 @@ router.post(
   authControllers.getAccessToken
 );
 router.post("/forgot_password", authControllers.getAccessToken);
+router.get("/profile", authControllers.getProfile);
 
 module.exports = router;

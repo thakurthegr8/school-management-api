@@ -1,0 +1,13 @@
+<% 
+const keys = [{type:"text", value:"first_name", placeholder:"First name"},
+{type:"text", value:"last_name",placeholder:"Last name"},
+{type:"email", value:"email", placeholder:"Your Email"},
+{type:"select", value:"gender", placeholder:"Your Email", options:["male", "female","others"]}] %>
+
+<h1>Add User</h1>
+<form id="addUserForm">
+  <% keys.forEach((item)=>{ %>
+  <label for="<%= item.value%>"><%= item.placeholder%></label>
+  <input type="<%= item.type%>" id="<%= item.value%>" name="<%= item.value%>" placeholder="<%= item.placeholder%>" />
+  <% }) %>
+</form>

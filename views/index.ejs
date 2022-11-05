@@ -4,10 +4,10 @@
 <head>
   <title>Home</title>
 </head>
-
 <body>
+  <%- include("../partials/navbar") %>
   <form id="login-form">
-    <input type="email" name="email" value="abc124@gmail.com" />
+    <input type="email" name="email" value="abc121@gmail.com" />
     <input type="password" name="password" value="abc12345" />
     <button type="submit">Submit</button>
   </form>
@@ -23,6 +23,7 @@
         const userData = await formResponse.data;
         const cookieKey = '<%= process.env.COOKIE_KEY%>';
         document.cookie = `${cookieKey}=${userData.access_token}`
+        window.location.pathname = "/dashboard";
       } catch (error) {
         console.log(error);
       }

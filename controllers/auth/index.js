@@ -43,7 +43,7 @@ const login = async (req, res) => {
   const body = req.body;
   try {
     const getUser = await User.findOne({ email: body.email });
-    
+
     if (getUser) {
       const isPasswordMatched = await bcrypt.compare(
         body.password,
@@ -121,5 +121,26 @@ const getAccessToken = async (req, res) => {
     return res.status(200).json("Invalid refresh token");
   }
 };
-
-module.exports = { signup, login, getAccessToken, loginWithAccessToken };
+const getProfile = async (req, res) => {
+  const oldAccessToken = req.headers.authorization.split(" ")[1];
+  try {
+    const decodedToken = jwt.verify(oldAccessToken, process.env.JWT_SECRET);
+    const offset = moment.unix(decodedToken.exp).diff(moment(), "minutes");
+    if (offset > 60) return res.status(200).json("token expired");
+    const getUser = await User.findById(decodedToken.data._id);
+    if (getUser) {
+      return res.status(200).json({
+        ...getUser._doc,
+      });
+    }
+  } catch (error) {
+    return res.status(200).json(error);
+  }
+};
+module.exports = {
+  signup,
+  login,
+  getAccessToken,
+  loginWithAccessToken,
+  getProfile,
+};
