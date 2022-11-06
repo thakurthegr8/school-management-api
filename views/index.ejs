@@ -1,16 +1,26 @@
+<%let message = ""%>
+
 <!DOCTYPE html>
 <html>
 
 <head>
   <title>Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
   <%- include("../partials/navbar") %>
-  <form id="login-form">
-    <input type="email" name="email" value="abc121@gmail.com" />
-    <input type="password" name="password" value="abc12345" />
-    <button type="submit">Submit</button>
-  </form>
+  <section>
+
+    <form id="login-form" class="border border-black mx-auto max-w-sm flex flex-col p-4 mt-2 space-y-3 bg-white shadow-xl rounded">
+      <h1 class="text-2xl font-bold text-center">Sign in</h1>
+      <input class="border border-black p-3 rounded-xl outline-none focus:border-purple-500 text-sm" type="email" name="email" value="abc129@gmail.com" />
+      <input class="border border-black p-3 rounded-xl outline-none focus:border-purple-500 text-sm" type="password" name="password" value="abc12345" />
+      <h1 class="text-md">Forgot Password?</h1>
+      <button class="border border-black p-3 rounded-xl bg-black text-white hover:bg-purple-500" type="submit">Submit</button>
+      <span>'<%=message.length !== 0%>'</span>
+    </form>
+  </section>
   <script>
     const form = document.querySelector('#login-form');
     const submitForm = async (e) => {
@@ -25,7 +35,7 @@
         document.cookie = `${cookieKey}=${userData.access_token}`
         window.location.pathname = "/dashboard";
       } catch (error) {
-        console.log(error);
+        message = error.response.data;
       }
     }
     form.addEventListener("submit", submitForm);

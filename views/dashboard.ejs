@@ -1,11 +1,12 @@
-<% const keys = ["first_name", "last_name","email","age","role"] %>
+<% const keys = ["first_name", "last_name","email","age","role"];
+%>
 <!DOCTYPE html>
 <html>
 
 <head>
   <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body>
   <%- include("../partials/navbar") %>
   <form id="login-form">
@@ -20,14 +21,19 @@
     const addUserFormHandler = async (e) => {
       e.preventDefault();
       console.log(addUserForm);
+      const accessToken = '<%=user.accessToken%>';
       try {
         const formResponse = await axios.post("/api/user", {
           first_name: addUserForm.first_name.value,
           last_name: addUserForm.last_name.value,
-          email: addUserForm.last_name.value,
+          email: addUserForm.email.value,
           gender: addUserForm.gender.value,
           age: addUserForm.age.value,
           role: addUserForm.role.value,
+        }, {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
         });
         const addedUserData = await formResponse.data;
         console.log(addedUserData);

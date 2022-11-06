@@ -21,7 +21,9 @@ router.get("/dashboard", urlGenerator, async (req, res) => {
     });
     const dashboardDetailsData = await dashboardDetails.json();
     console.table(dashboardDetailsData);
-    return res.status(200).render("dashboard", { user: dashboardDetailsData });
+    return res
+      .status(200)
+      .render("dashboard", { user: { ...dashboardDetailsData, accessToken } });
   } catch (error) {
     return res.status(404);
   }
