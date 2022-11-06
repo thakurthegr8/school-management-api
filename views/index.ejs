@@ -1,5 +1,3 @@
-<%let message = ""%>
-
 <!DOCTYPE html>
 <html>
 
@@ -10,20 +8,21 @@
 
 <body>
   <%- include("../partials/navbar") %>
-  <section>
-
+  <section class="min-h-screen">
     <form id="login-form" class="border border-black mx-auto max-w-sm flex flex-col p-4 mt-2 space-y-3 bg-white shadow-xl rounded">
       <h1 class="text-2xl font-bold text-center">Sign in</h1>
       <input class="border border-black p-3 rounded-xl outline-none focus:border-purple-500 text-sm" type="email" name="email" value="abc129@gmail.com" />
       <input class="border border-black p-3 rounded-xl outline-none focus:border-purple-500 text-sm" type="password" name="password" value="abc12345" />
       <h1 class="text-md">Forgot Password?</h1>
       <button class="border border-black p-3 rounded-xl bg-black text-white hover:bg-purple-500" type="submit">Submit</button>
-      <span>'<%=message.length !== 0%>'</span>
+      <span id="login-message-data" class="bg-red-200 text-red-600 font-semibold p-2 opacity-0 rounded"></span>
     </form>
   </section>
+  <%- include("../partials/footer") %>
   <script>
     const form = document.querySelector('#login-form');
     const submitForm = async (e) => {
+      document.getElementById("login-message-data").classList.remove("opacity-100");
       e.preventDefault();
       try {
         const formResponse = await axios.post("/api/auth/login", {
@@ -35,7 +34,8 @@
         document.cookie = `${cookieKey}=${userData.access_token}`
         window.location.pathname = "/dashboard";
       } catch (error) {
-        message = error.response.data;
+        document.getElementById("login-message-data").classList.add("opacity-100");
+        document.getElementById("login-message-data").innerHTML = error.response.data;
       }
     }
     form.addEventListener("submit", submitForm);

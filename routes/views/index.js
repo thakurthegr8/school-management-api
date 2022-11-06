@@ -29,4 +29,64 @@ router.get("/dashboard", urlGenerator, async (req, res) => {
   }
 });
 
+router.get("/user", urlGenerator, async (req, res) => {
+  const cookies = req.cookies;
+  const accessToken = cookies[process.env.COOKIE_KEY];
+  if (!accessToken) return res.status(404).redirect("/404");
+  try {
+    const dashboardDetails = await fetch(`${req.url}/api/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const dashboardDetailsData = await dashboardDetails.json();
+    console.table(dashboardDetailsData);
+    return res
+      .status(200)
+      .render("user", { user: { ...dashboardDetailsData, accessToken } });
+  } catch (error) {
+    return res.status(404);
+  }
+});
+
+router.get("/class", urlGenerator, async (req, res) => {
+  const cookies = req.cookies;
+  const accessToken = cookies[process.env.COOKIE_KEY];
+  if (!accessToken) return res.status(404).redirect("/404");
+  try {
+    const dashboardDetails = await fetch(`${req.url}/api/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const dashboardDetailsData = await dashboardDetails.json();
+    console.table(dashboardDetailsData);
+    return res
+      .status(200)
+      .render("classes", { user: { ...dashboardDetailsData, accessToken } });
+  } catch (error) {
+    return res.status(404);
+  }
+});
+
+router.get("/subject", urlGenerator, async (req, res) => {
+  const cookies = req.cookies;
+  const accessToken = cookies[process.env.COOKIE_KEY];
+  if (!accessToken) return res.status(404).redirect("/404");
+  try {
+    const dashboardDetails = await fetch(`${req.url}/api/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const dashboardDetailsData = await dashboardDetails.json();
+    console.table(dashboardDetailsData);
+    return res
+      .status(200)
+      .render("subject", { user: { ...dashboardDetailsData, accessToken } });
+  } catch (error) {
+    return res.status(404);
+  }
+});
+
 module.exports = router;
