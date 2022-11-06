@@ -34,16 +34,16 @@ router.get("/user", urlGenerator, async (req, res) => {
   const accessToken = cookies[process.env.COOKIE_KEY];
   if (!accessToken) return res.status(404).redirect("/404");
   try {
-    const dashboardDetails = await fetch(`${req.url}/api/auth/profile`, {
+    const userList = await fetch(`${req.url}/api/user`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    const dashboardDetailsData = await dashboardDetails.json();
-    console.table(dashboardDetailsData);
+    const userListData = await userList.json();
+    console.table(userListData);
     return res
       .status(200)
-      .render("user", { user: { ...dashboardDetailsData, accessToken } });
+      .render("user", { users: userListData });
   } catch (error) {
     return res.status(404);
   }
