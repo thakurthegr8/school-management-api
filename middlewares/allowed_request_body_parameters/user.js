@@ -47,9 +47,20 @@ const deleteUserBodySchema = async (req, res, next) => {
     return res.status(500).json(error);
   }
 };
-
+const deleteUserBulkBodySchema = async (req, res, next) => {
+  const schema = new Joi.object({
+    id: Joi.array(),
+  });
+  try {
+    await schema.validateAsync(req.body);
+    isAdmin(req, res, next);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 module.exports = {
   getUserBodySchema,
   addUserBodySchema,
   deleteUserBodySchema,
+  deleteUserBulkBodySchema,
 };

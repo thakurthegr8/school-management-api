@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 const DB = require("./database");
 
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(cookieParser());
 app.set("view engine", "ejs");
-
+app.use(express.static("public"));
 app.use("/", viewRoutes);
 
 app.use("/api/auth", authRoutes);

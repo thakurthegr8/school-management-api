@@ -1,10 +1,10 @@
 <% 
 const usersTableFieldHeadings =
- [{field:"_id", name:"ID"},
- {field:"first_name", name:"First Name"},
- {field:"last_name", name:"Last Name"},
- {field:"email", name:"Email"},
- {field:"role", name:"Role"}];
+ [{field:"_id", name:"ID", renderInput:true},
+ {field:"first_name", name:"First Name",renderInput:false },
+ {field:"last_name", name:"Last Name",renderInput:false},
+ {field:"email", name:"Email",renderInput:false},
+ {field:"role", name:"Role",renderInput:false},];
 %>
 <!DOCTYPE html>
 <html>
@@ -15,32 +15,42 @@ const usersTableFieldHeadings =
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 ">
   <%- include("../partials/navbar") %>
   <section class="flex">
     <%- include("../partials/sidebar" ,{link:"user"}) %>
-    <article class="p-4 flex flex-col">
+    <article class="p-4 flex flex-col overflow-hidden gap-4">
       <h1 class="text-xl font-semibold">Users</h1>
-      <table class="bg-white shadow-md divide-y">
-        <tr>
-          <% usersTableFieldHeadings.forEach(item=>{%>
-          <th class="p-2"><%= item.name %> </th>
+      <div>
+        <%- include("../partials/admin/add_user") %>
+      </div>
+      <form id="users_table">
+        <table class="bg-white shadow-md divide-y rounded-md">
+          <tr>
+            <% usersTableFieldHeadings.forEach(item=>{%>
+            <th class="p-3 text-left"><%= item.name %> </th>
+            <% }) %>
+          </tr>
+          <%users.forEach(item=>{ %>
+          <tr class="border-b">
+            <% usersTableFieldHeadings.forEach((fieldItem,index)=>{%>
+            <td class="p-3">
+              <% if(fieldItem.renderInput) {%>
+              <input type="checkbox" name="user" value="<%=item[fieldItem.field] %>" />
+              <% }else { %>
+              <%= item[fieldItem.field] %>
+              <% }%>
+            </td>
+            <% }) %>
+          </tr>
           <% }) %>
-        </tr>
-        <%users.forEach(item=>{ %>
-        <tr class="border-b">
-          <% usersTableFieldHeadings.forEach(fieldItem=>{%>
-            <td class="p-2"><%= item[fieldItem.field] %> </td>
-          <% }) %>
-        </tr>
-        <% }) %>
-      </table>
+        </table>
+      </form>
     </article>
   </section>
-  <script>
-
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js" integrity="sha512-wT7uPE7tOP6w4o28u1DN775jYjHQApdBnib5Pho4RB0Pgd9y7eSkAV1BTqQydupYDB9GBhTcQQzyNMPMV3cAew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
+  <script src="../js/user.js"></script>
 </body>
 
 </html>

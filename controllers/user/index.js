@@ -64,4 +64,19 @@ const deleteUser = async (req, res) => {
     return res.status(500).json(error);
   }
 };
-module.exports = { addUser, deleteUser, getUser };
+const deleteUserBulk = async (req, res) => {
+  const body = req.body;
+  try {
+    try {
+      const deleteResponse = await User.findOneAndRemove({ _id: body.id });
+      console.log(deleteResponse);
+      return res.status(201).json(deleteResponse._doc);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(error);
+    }
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+module.exports = { addUser, deleteUser, getUser, deleteUserBulk };

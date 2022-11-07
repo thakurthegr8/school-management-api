@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const isAdmin = async (req, res, next) => {
+  console.log(req.headers.authorization);
   if (!req.headers.authorization)
     return res.status(501).json("No access token");
   const accessToken = req.headers.authorization.split(" ")[1];
