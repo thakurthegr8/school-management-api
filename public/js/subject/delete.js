@@ -1,0 +1,1 @@
+const deleteSubjectBtn = document.querySelector("#delete_subject_btn");
