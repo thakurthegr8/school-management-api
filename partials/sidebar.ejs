@@ -6,9 +6,8 @@
 <div class="flex flex-col border-r border-gray-300 h-screen select-none bg-gray-50 divide-y">
   <% menuItems.forEach(item=>{%>
   <a href="<%=item.link  %> ">
-    <i class="<%=`${item.className} ${link === item.id ? "text-purple-900":null} transition text-xl w-16 h-16 p-1 flex flex-col justify-center items-center rounded-md cursor-pointer hover:bg-gray-100  hover:text-purple-900 active:scale-90 `%>">
+    <i class="<%=`${item.className} ${link === item.id ? "text-indigo-900 ":null} transition text-xl w-16 h-16 p-1 flex flex-col justify-center items-center rounded-md cursor-pointer hover:bg-gray-100  hover:text-indigo-900 active:scale-90 `%>">
       <span class="text-[0.6rem] lowercase"><%= item.name %> </span>
-
     </i>
   </a>
   <% }) %>

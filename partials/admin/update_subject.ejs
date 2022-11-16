@@ -1,0 +1,33 @@
+<% 
+const forms = [
+{
+    title:"Update Code",
+    formId:"updateSubjectCodeForm",
+    fields:[{type:"hidden", value:"_id", placeholder:null},
+{type:"text", value:"code", placeholder:"Subject Code"}]
+},
+{
+    title:"Update Name",
+    formId:"updateSubjectNameForm",
+    fields:[{type:"hidden", value:"_id", placeholder:null},
+    {type:"text", value:"name",placeholder:"Subject Name"},]
+}
+];
+const buttonClasses = "font-semibold text-white rounded-md p-2 hover:opacity-90 active:scale-90 transition-all";
+ %>
+<dialog id="update_subject_dialog" class="shadow-md rounded-md shadow-md w-full max-w-md transition border">
+  <div class="flex flex-col w-full gap-2">
+    <h1 class="text-xl font-semibold">
+      Update subject
+    </h1>
+    <% forms.forEach(formItem=>{ %>
+    <details class="flex flex-col cursor-pointer">
+      <summary class="text-lg"><%= formItem.title %> </summary>
+      <%-include("../components/data_entry/form",{props:{
+        id:formItem.formId,
+        fields:formItem.fields
+      }})%>
+    </details>
+    <% }) %>
+  </div>
+</dialog>
