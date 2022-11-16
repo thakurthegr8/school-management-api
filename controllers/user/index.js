@@ -68,7 +68,7 @@ const deleteUserBulk = async (req, res) => {
   const body = req.body;
   try {
     try {
-      const deleteResponse = await User.findOneAndRemove({ _id: body.id });
+      const deleteResponse = await User.deleteMany({ _id: body.id });
       console.log(deleteResponse);
       return res.status(201).json(deleteResponse._doc);
     } catch (error) {

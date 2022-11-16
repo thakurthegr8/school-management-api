@@ -1,4 +1,7 @@
-<% const keys = ["first_name", "last_name","email","age","role"];
+<% const keys = ["first_name", "last_name","email","age","role"];const servicesItems =
+ [{name:"Users", className:"fa-solid fa-user",cardStyle:"bg-orange-500", link:"/user", id:"user", content:"CRUD operations on users"},
+ {name:"Classes",className:"fa-sharp fa-solid fa-users",cardStyle:"bg-red-500", link:"/class",id:"class",content:"CRUD operations on classes"},
+ {name:"Subjects",className:"fa-solid fa-book",cardStyle:"bg-indigo-500", link:"/subject", id:"subject",content:"CRUD operations on subjects"} ]
 %>
 <!DOCTYPE html>
 <html>
@@ -13,9 +16,21 @@
   <%- include("../partials/navbar") %>
   <section class="flex">
     <%- include("../partials/sidebar",{link:"dashboard"}) %>
-    <article class="p-4 flex flex-col">
-      <h1 class="text-xl">Hi, <%= `${user.first_name.charAt(0).toUpperCase()}${user.first_name.slice(1)}` %> </h1>
-      <%- user.role === "admin" ? include("../partials/admin/summary"):null%>
+    <article class="p-4 flex flex-col flex-1 gap-4">
+      <%- include("../partials/components/data_display/typography",{props:{type:"subheading", innerText:`Hi, ${user.first_name.charAt(0).toUpperCase()}${user.first_name.slice(1)}`}}) %>
+      <%- include("../partials/components/data_display/typography",{props:{type:"title", innerText:"Scholarly Services"}}) %>
+      <section class="grid grid-cols-auto md:grid-cols-5 gap-4 w-full">
+        <% servicesItems.forEach(item=>{%>
+        <a href="<%=item.link  %>" class="bg-white space-y-2 p-4 border border-gray-300 rounded-xl  active:scale-95 transition-all <%=item.cardStyle%> text-white">
+          <i class="<%=`${item.className} text-4xl`%>">
+          </i>
+          <div>
+          <%- include("../partials/components/data_display/typography",{props:{type:"subheading", innerText:item.name}}) %>
+          <%- include("../partials/components/data_display/typography",{props:{type:"small", innerText:item.content}}) %>
+        </div>
+        </a>
+        <% }) %>
+      </section>
     </article>
   </section>
   <script>

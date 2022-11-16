@@ -8,13 +8,13 @@
 
 <body>
   <%- include("../partials/navbar") %>
-  <section class="min-h-screen">
-    <form id="login-form" class="border border-black mx-auto max-w-sm flex flex-col p-4 mt-2 space-y-3 bg-white shadow-xl rounded">
+  <section class="min-h-screen bg-gray-100 p-8">
+    <form id="login-form" class="border border-gray-300 mx-auto max-w-sm flex flex-col p-8 space-y-3 bg-white shadow-xl rounded-xl">
       <h1 class="text-2xl font-bold text-center">Sign in</h1>
-      <input class="border border-black p-3 rounded-xl outline-none focus:border-purple-500 text-sm" type="email" name="email" value="abc129@gmail.com" />
-      <input class="border border-black p-3 rounded-xl outline-none focus:border-purple-500 text-sm" type="password" name="password" value="abc12345" />
-      <h1 class="text-md">Forgot Password?</h1>
-      <button class="border border-black p-3 rounded-xl bg-black text-white hover:bg-purple-500" type="submit">Submit</button>
+      <%- include("../partials/components/data_entry/input", {props:{type:"text",name:"email", placeholder:"Enter email",value:"abc121@gmail.com"}}) %>
+      <%- include("../partials/components/data_entry/input", {props:{type:"password",name:"password", placeholder:"Enter password",value:"abc12345"}}) %>
+      <h1 class="text-sm">Forgot Password?</h1>
+      <%- include("../partials/components/data_entry/button", {props:{innerText:"Submit", type:"primary"}}) %>
       <span id="login-message-data" class="bg-red-200 text-red-600 font-semibold p-2 opacity-0 rounded"></span>
     </form>
   </section>
@@ -32,6 +32,10 @@
         const userData = await formResponse.data;
         const cookieKey = '<%= process.env.COOKIE_KEY%>';
         document.cookie = `${cookieKey}=${userData.access_token}`
+        if (userData.role !== 'admin') {
+          alert("Only admins are allowed");
+          return;
+        }
         window.location.pathname = "/dashboard";
       } catch (error) {
         document.getElementById("login-message-data").classList.add("opacity-100");

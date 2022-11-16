@@ -1,0 +1,8 @@
+<% const variants = 
+{"title":{"class":"text-3xl font-bold"},
+"heading":{"class":"text-2xl font-bold"},
+"subheading":{"class":"text-xl font-semibold"},
+"normal":{"class":"text-base"},
+"small":{"class":"text-sm"}} %>
+
+<p class="<%=variants?.[props.type]?.class%>"><%=props.innerText%></p>
